@@ -307,7 +307,7 @@ export default function ChatInterface() {
   // API and database functions
   const loadChatHistories = async () => {
     try {
-      const response = await fetch('http://localhost:8080/chats');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats`);
       if (response.ok) {
         const histories = await response.json();
         setChatHistories(histories);
@@ -330,7 +330,7 @@ export default function ChatInterface() {
         updatedAt: new Date().toISOString(),
       };
 
-      const response = await fetch('http://localhost:8080/chats', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -348,9 +348,12 @@ export default function ChatInterface() {
 
   const deleteChatHistory = async (chatId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/chats/${chatId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/chats/${chatId}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       if (response.ok) {
         setChatHistories((prev) => prev.filter((chat) => chat.id !== chatId));
@@ -400,13 +403,16 @@ export default function ChatInterface() {
         history: apiHistory,
       };
 
-      const response = await fetch('http://localhost:8080/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/generate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
