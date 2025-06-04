@@ -133,7 +133,7 @@ export default function ChatInterface() {
   const [completedMessages, setCompletedMessages] = useState<Set<string>>(
     new Set()
   );
-  const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  // const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const shouldFocusAfterStreamingRef = useRef(false);
   const mainContainerRef = useRef<HTMLDivElement>(null);
@@ -150,8 +150,7 @@ export default function ChatInterface() {
   const [mounted, setMounted] = useState(false);
 
   // Constants for layout calculations
-  const HEADER_HEIGHT = 48;
-  const INPUT_AREA_HEIGHT = 100;
+
   const TOP_PADDING = 48;
   const BOTTOM_PADDING = 128;
   const ADDITIONAL_OFFSET = 16;
@@ -224,7 +223,7 @@ export default function ChatInterface() {
   useEffect(() => {
     if (messages.length === 0) {
       setMessageSections([]);
-      setActiveSectionId(null);
+      // setActiveSectionId(null);
       return;
     }
 
@@ -254,7 +253,7 @@ export default function ChatInterface() {
           sectionIndex: sections.length,
         };
 
-        setActiveSectionId(newSectionId);
+        // setActiveSectionId(newSectionId);
       } else {
         currentSection.messages.push(message);
       }
@@ -300,7 +299,7 @@ export default function ChatInterface() {
 
   useEffect(() => {
     if (!isStreaming && shouldFocusAfterStreamingRef.current && !isMobile) {
-      focusTextarea();
+      // focusTextarea();
       shouldFocusAfterStreamingRef.current = false;
     }
   }, [isStreaming, isMobile]);
