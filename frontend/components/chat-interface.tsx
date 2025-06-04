@@ -831,7 +831,7 @@ export default function ChatInterface() {
   };
 
   const renderWelcomeScreen = () => (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 pb-32">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-6">
       <div className="max-w-4xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
@@ -978,7 +978,7 @@ export default function ChatInterface() {
         </div>
       </div>
 
-      <header className="fixed top-0 left-0 right-0 h-12 flex items-center px-4 z-20 bg-background border-b border-border">
+      <header className="sticky top-0 left-0 right-0 h-12 flex items-center px-4 z-20 bg-background border-b border-border">
         <div className="w-full flex items-center justify-between px-2">
           <Button
             variant="ghost"
@@ -1025,7 +1025,7 @@ export default function ChatInterface() {
       ) : (
         <div
           ref={chatContainerRef}
-          className="flex-grow pb-32 pt-12 px-4 overflow-y-auto scroll-smooth"
+          className="flex-grow py-6 px-4 overflow-y-auto scroll-smooth"
           style={{ overscrollBehavior: 'contain' }}
         >
           <div className="max-w-4xl mx-auto space-y-6">
@@ -1065,7 +1065,7 @@ export default function ChatInterface() {
         </div>
       )}
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background">
+      <div className="sticky bottom-0 left-0 right-0 p-4 bg-background">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div
             ref={inputContainerRef}
