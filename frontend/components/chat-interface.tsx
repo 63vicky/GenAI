@@ -109,7 +109,7 @@ const suggestionCards: SuggestionCard[] = [
     title: 'Stay updated',
     description: 'Learn about web dev trends',
     icon: <TrendingUp className="h-5 w-5" />,
-    prompt: 'What are the latest trends in web development for 2024?',
+    prompt: 'What are the latest trends in web development?',
   },
 ];
 
@@ -141,6 +141,7 @@ export default function ChatInterface() {
     start: number | null;
     end: number | null;
   }>({ start: null, end: null });
+  const [isThinking, setIsThinking] = useState(false);
 
   // Chat history and theme states
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
@@ -531,6 +532,9 @@ export default function ChatInterface() {
     const messageId = Date.now().toString();
     setStreamingMessageId(messageId);
 
+    // Set thinking state to true
+    setIsThinking(true);
+
     setMessages((prev) => [
       ...prev,
       {
@@ -548,6 +552,10 @@ export default function ChatInterface() {
 
     try {
       const response = await generateResponseFromAPI(userMessage, messages);
+
+      // Set thinking state to false before streaming begins
+      setIsThinking(false);
+
       await simulateTextStreaming(response);
 
       const updatedMessages = messages.concat([
@@ -600,6 +608,7 @@ export default function ChatInterface() {
       setStreamingWords([]);
       setStreamingMessageId(null);
       setIsStreaming(false);
+      setIsThinking(false); // Ensure thinking state is reset
     }
   };
 
@@ -761,6 +770,7 @@ export default function ChatInterface() {
   const renderMessage = (message: Message) => {
     const isCompleted = completedMessages.has(message.id);
     const isStreamingMessage = message.id === streamingMessageId;
+    const isThinkingMessage = isThinking && message.id === streamingMessageId;
 
     // Suppose 'htmlString' contains your AI-generated HTML
     const tempDiv = document.createElement('div');
@@ -788,7 +798,7 @@ export default function ChatInterface() {
           ) : (
             <>
               {/* For completed system messages, render with formatting */}
-              {message.content && !isStreamingMessage && (
+              {message.content && !isStreamingMessage && !isThinkingMessage && (
                 <FormattedMessage
                   content={message.content}
                   isStreaming={false}
@@ -800,8 +810,31 @@ export default function ChatInterface() {
                 />
               )}
 
+              {/* For thinking state, show the thinking animation */}
+              {isThinkingMessage && (
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div
+                      className="w-2 h-2 rounded-full bg-foreground/70 animate-bounce"
+                      style={{ animationDelay: '0ms' }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 rounded-full bg-foreground/70 animate-bounce"
+                      style={{ animationDelay: '150ms' }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 rounded-full bg-foreground/70 animate-bounce"
+                      style={{ animationDelay: '300ms' }}
+                    ></div>
+                  </div>
+                  <span className="text-sm text-foreground/70">
+                    AI is thinking...
+                  </span>
+                </div>
+              )}
+
               {/* For streaming messages, render with animation and cursor */}
-              {isStreamingMessage && (
+              {isStreamingMessage && !isThinkingMessage && (
                 <FormattedMessage
                   content=""
                   isStreaming={true}
@@ -832,7 +865,7 @@ export default function ChatInterface() {
 
   const renderWelcomeScreen = () => (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 overflow-y-auto scroll-smooth">
-      <div className="max-w-4xl w-full text-center space-y-8 h-full">
+      <div className="max-w-4xl w-full text-center space-y-8 h-full md:h-auto">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             Welcome to GenAI Chat
@@ -1081,6 +1114,8 @@ export default function ChatInterface() {
                 placeholder={
                   isStreaming
                     ? 'Waiting for response...'
+                    : isThinking
+                    ? 'AI is thinking...'
                     : 'Ask anything... (⌘K to focus, ⌘↵ to send)'
                 }
                 className="min-h-[24px] max-h-[160px] w-full rounded-3xl border-0 !bg-transparent text-foreground placeholder:text-muted-foreground placeholder:text-base focus-visible:ring-0 focus-visible:ring-offset-0 text-base pl-2 pr-4 pt-0 pb-0 resize-none overflow-y-auto leading-tight"
@@ -1095,6 +1130,7 @@ export default function ChatInterface() {
                     });
                   }
                 }}
+                disabled={isStreaming || isThinking}
               />
             </div>
 
@@ -1110,7 +1146,7 @@ export default function ChatInterface() {
                       activeButton === 'add' && 'bg-accent border-border'
                     )}
                     onClick={() => toggleButton('add')}
-                    disabled={isStreaming}
+                    disabled={isStreaming || isThinking}
                   >
                     <Plus
                       className={cn(
@@ -1129,7 +1165,7 @@ export default function ChatInterface() {
                       activeButton === 'deepSearch' && 'bg-accent border-border'
                     )}
                     onClick={() => toggleButton('deepSearch')}
-                    disabled={isStreaming}
+                    disabled={isStreaming || isThinking}
                   >
                     <Search
                       className={cn(
@@ -1155,7 +1191,7 @@ export default function ChatInterface() {
                       activeButton === 'think' && 'bg-accent border-border'
                     )}
                     onClick={() => toggleButton('think')}
-                    disabled={isStreaming}
+                    disabled={isStreaming || isThinking}
                   >
                     <Lightbulb
                       className={cn(
@@ -1182,7 +1218,7 @@ export default function ChatInterface() {
                     'rounded-full h-8 w-8 border-0 flex-shrink-0 transition-all duration-200',
                     hasTyped ? '!bg-primary scale-110' : 'bg-muted'
                   )}
-                  disabled={!inputValue.trim() || isStreaming}
+                  disabled={!inputValue.trim() || isStreaming || isThinking}
                 >
                   <ArrowUp
                     className={cn(

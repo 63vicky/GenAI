@@ -243,12 +243,7 @@ export function FormattedMessage({
                 {word.text}
               </span>
             ))}
-            <span
-              className="typing-cursor"
-              style={{
-                animationDelay: `${streamingWords.length * 30}ms`,
-              }}
-            />
+            <span className="typing-cursor" />
           </span>
         </p>
       </div>
