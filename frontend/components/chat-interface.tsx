@@ -831,8 +831,8 @@ export default function ChatInterface() {
   };
 
   const renderWelcomeScreen = () => (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-6">
-      <div className="max-w-4xl w-full text-center space-y-8">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 overflow-y-auto scroll-smooth">
+      <div className="max-w-4xl w-full text-center space-y-8 h-full">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             Welcome to GenAI Chat
@@ -978,7 +978,7 @@ export default function ChatInterface() {
         </div>
       </div>
 
-      <header className="sticky top-0 left-0 right-0 h-12 flex items-center px-4 z-20 bg-background border-b border-border">
+      <header className="sticky top-0 left-0 right-0 h-12 flex items-center px-4 z-20 bg-background border-b border-border p-2">
         <div className="w-full flex items-center justify-between px-2">
           <Button
             variant="ghost"
