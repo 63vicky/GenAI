@@ -404,16 +404,13 @@ export default function ChatInterface() {
         history: apiHistory,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/generate`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chats`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();

@@ -258,9 +258,7 @@ export function InteractiveButtons({
             onClick={() => setLiked(liked === true ? null : true)}
             className={cn(
               'h-8 w-8 p-0 transition-all duration-200 hover:scale-110',
-              liked === true
-                ? 'text-green-600 bg-green-50'
-                : 'text-muted-foreground'
+              liked === true ? 'text-green-600' : 'text-muted-foreground'
             )}
           >
             <ThumbsUp className="h-3 w-3" />
@@ -271,9 +269,7 @@ export function InteractiveButtons({
             onClick={() => setLiked(liked === false ? null : false)}
             className={cn(
               'h-8 w-8 p-0 transition-all duration-200 hover:scale-110',
-              liked === false
-                ? 'text-red-600 bg-red-50'
-                : 'text-muted-foreground'
+              liked === false ? 'text-red-600' : 'text-muted-foreground'
             )}
           >
             <ThumbsDown className="h-3 w-3" />
