@@ -30,11 +30,15 @@ export async function POST(req: NextRequest) {
       text: finalEdited,
       timestamp: new Date().toISOString(),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let errorMessage = 'Internal error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Internal error',
+        error: errorMessage,
       },
       { status: 500 }
     );
